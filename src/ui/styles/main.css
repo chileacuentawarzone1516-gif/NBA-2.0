@@ -67,6 +67,11 @@ button {
   outline-offset: 2px;
 }
 
+/* Programmatic focus targets (screen headings) should not show a ring. */
+[tabindex='-1']:focus {
+  outline: none;
+}
+
 [hidden] {
   display: none !important;
 }
@@ -686,8 +691,14 @@ button {
   padding: 16px;
   display: grid;
   gap: 12px;
-  position: sticky;
-  top: 0;
+}
+
+/* The roster detail stays in view while the list scrolls (wide layouts only). */
+@media (min-width: 761px) {
+  .player-detail {
+    position: sticky;
+    top: 0;
+  }
 }
 
 .detail-title {
@@ -1250,20 +1261,20 @@ button {
   border-right: 5px solid var(--text);
 }
 
+/* Feed sits under the stamina bar so it never covers the rim or the action. */
 .feed {
   position: absolute;
-  top: calc(96px + var(--safe-top));
-  left: 50%;
-  transform: translateX(-50%);
+  top: calc(58px + var(--safe-top));
+  left: calc(12px + var(--safe-left));
   display: grid;
-  justify-items: center;
+  justify-items: start;
   gap: 6px;
-  width: min(80vw, 520px);
+  width: min(42vw, 360px);
 }
 
 .toast {
   display: grid;
-  justify-items: center;
+  justify-items: start;
   padding: 6px 16px;
   border-radius: 10px;
   background: rgba(8, 11, 18, 0.78);
@@ -1429,6 +1440,10 @@ button {
   background: rgba(20, 28, 42, 0.72);
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
   transition: transform 0.06s, background 0.1s;
+}
+
+.action-btn.unavailable {
+  opacity: 0.28;
 }
 
 .action-btn.pressed {

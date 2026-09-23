@@ -96,6 +96,15 @@ describe('possession and rules', () => {
     expect(sim.players[0]!.stats.fga).toBe(1);
   });
 
+  it('buffers a shoot button held through the check so the shot starts when play goes live', () => {
+    const sim = soloSim();
+    const inputs = [emptyInput(), emptyInput()];
+    inputs[0]!.buttons = Button.Shoot;
+    stepN(sim, Math.ceil(1.2 / SIM_DT) + 2, inputs);
+    expect(sim.match.phase).toBe('live');
+    expect(sim.players[0]!.action.kind).toBe('shotGather');
+  });
+
   it('a quick tap on shoot is a pump fake (ball stays in hand)', () => {
     const sim = soloSim();
     const inputs = [emptyInput(), emptyInput()];

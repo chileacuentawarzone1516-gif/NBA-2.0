@@ -3,7 +3,6 @@ import type { I18nKey } from './es';
 /** English strings. Typed against the Spanish reference so missing keys fail the build. */
 export const en: Record<I18nKey, string> = {
   'app.tagline': '3D street basketball',
-  'app.loading': 'Loading…',
   'app.rotate': 'Rotate your device to play in landscape',
   'app.webglError': 'Your browser does not support WebGL2. Please update it or try another browser.',
 
@@ -24,7 +23,6 @@ export const en: Record<I18nKey, string> = {
   'setup.useMyPlayer': 'Play as My Player',
   'setup.start': 'Start',
 
-  'mode.practice': 'Free practice',
   'mode.oneOnOne': '1 on 1',
   'mode.threeOnThree': '3 on 3',
   'mode.oneOnOne.desc': 'To 15 · 3 min · 14 s shot clock',
@@ -107,7 +105,6 @@ export const en: Record<I18nKey, string> = {
   'myPlayer.archetype': 'Archetype',
   'myPlayer.points': 'Upgrade points: {points}',
   'myPlayer.upgrade': 'Upgrade',
-  'myPlayer.cost': 'Cost {cost}',
   'myPlayer.maxed': 'Max',
   'myPlayer.skills': 'Skills ({equipped}/{max})',
   'myPlayer.locked': 'Level {level}',
@@ -142,7 +139,6 @@ export const en: Record<I18nKey, string> = {
   'settings.cameraDistance': 'Camera distance',
   'settings.language': 'Language',
   'settings.debug': 'Show debug panel',
-  'settings.saved': 'Settings saved',
 
   'hud.pause': 'Pause',
   'hud.clear': 'TAKE IT BACK',
@@ -175,8 +171,6 @@ export const en: Record<I18nKey, string> = {
   'feed.shotClock': 'Shot clock violation',
   'feed.outOfBounds': 'Out of bounds',
   'feed.clearViolation': 'Did not take it back',
-  'feed.turnover': 'Turnover',
-  'feed.rebound': 'Rebound',
   'feed.checkBall': 'Ball to {team}',
   'feed.buzzer': 'At the buzzer!',
 
@@ -213,4 +207,7 @@ export const en: Record<I18nKey, string> = {
   'debug.toggleAi': 'AI on/off',
   'debug.slowmo': 'Slow motion',
   'debug.hitboxes': 'Hitboxes',
+  'debug.simulateEnd': 'Simulate to end',
+  'debug.switchPlayer': 'Switch player',
+  'debug.boost': '+10 attributes',
 };

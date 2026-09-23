@@ -65,7 +65,7 @@ export function createResultsScreen(
   return h(
     'section',
     { class: `screen results ${won ? 'win' : 'loss'}`, attrs: { 'aria-label': t(won ? 'results.win' : 'results.loss') } },
-    h('p', { class: 'result-banner', text: t(won ? 'results.win' : 'results.loss') }),
+    h('h1', { class: 'result-banner', text: t(won ? 'results.win' : 'results.loss') }),
     h(
       'div',
       { class: 'final-score', attrs: { 'aria-label': t('results.final') } },

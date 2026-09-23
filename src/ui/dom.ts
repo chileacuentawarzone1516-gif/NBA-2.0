@@ -24,7 +24,14 @@ export function h<K extends keyof HTMLElementTagNameMap>(tag: K, props: ElementP
       el.setAttribute(key, value === true ? '' : String(value));
     }
   }
-  if (props.style) Object.assign(el.style, props.style);
+  if (props.style) {
+    for (const [key, value] of Object.entries(props.style)) {
+      if (typeof value !== 'string') continue;
+      // Custom properties are only settable through setProperty (plain assignment is ignored).
+      if (key.startsWith('--')) el.style.setProperty(key, value);
+      else (el.style as unknown as Record<string, string>)[key] = value;
+    }
+  }
   if (props.on) {
     for (const [type, handler] of Object.entries(props.on)) {
       if (handler) el.addEventListener(type, handler as EventListener);

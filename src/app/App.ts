@@ -1,7 +1,7 @@
 import { AudioEngine } from '../audio/AudioEngine';
 import { createLogger } from '../core/logger';
 import { hashSeed } from '../core/rng';
-import { setLanguage } from '../data/i18n';
+import { setLanguage, t } from '../data/i18n';
 import { MODES } from '../data/modes';
 import { QUALITY_PRESETS, detectDefaultQuality } from '../data/quality';
 import { getTeam, type TeamDef } from '../data/teams';
@@ -37,6 +37,7 @@ export class App {
   private session: GameSession | null = null;
   private lastConfig: { config: MatchConfig; teams: readonly [TeamDef, TeamDef] } | null = null;
   private readonly ctx: UiContext;
+  private readonly rotateText: Element | null;
 
   constructor(root: HTMLElement) {
     const nav = navigator as Navigator & { deviceMemory?: number };
@@ -52,6 +53,8 @@ export class App {
     if (!canvas || !ui || !overlay) throw new Error('App root is missing #scene, #ui or #overlay');
     this.ui = ui;
     this.overlay = overlay;
+    this.rotateText = root.querySelector('.rotate-hint p');
+    this.localizeStatic();
     this.renderer = new Renderer(canvas, QUALITY_PRESETS[settings.quality]);
     this.backdrop = new MenuBackdrop(this.renderer);
     window.addEventListener('resize', () => this.renderer.resize());
@@ -83,6 +86,7 @@ export class App {
   private show(screenEl: HTMLElement): void {
     this.ui.replaceChildren(screenEl);
     this.ui.hidden = false;
+    this.ui.scrollTop = 0;
     document.body.classList.remove('in-match');
     // Move focus to the new screen for keyboard and screen-reader users.
     const focusTarget = screenEl.querySelector<HTMLElement>('h1, .menu-item, button');
@@ -92,9 +96,15 @@ export class App {
     }
   }
 
+  /** Static markup outside the screens (pre-rendered in index.html) follows the language setting. */
+  private localizeStatic(): void {
+    if (this.rotateText) this.rotateText.textContent = t('app.rotate');
+  }
+
   private applySettings(): void {
     const s = this.save.get().settings;
     setLanguage(s.language);
+    this.localizeStatic();
     this.audio.setVolumes({ master: s.masterVolume, sfx: s.sfxVolume, crowd: s.crowdVolume });
     const preset = QUALITY_PRESETS[s.quality];
     if (preset.id !== this.renderer.preset.id && this.renderer.setQuality(preset)) this.backdrop.rebuild();
@@ -129,6 +139,10 @@ export class App {
         onFinish: (result) => this.onFinish(result),
         onQuit: () => this.quitToMenu(),
         onRestart: () => this.launch({ ...config, seed: hashSeed(`${Date.now()}-r`) }, teams),
+        onDebugGrantXp: (xp) =>
+          this.save.update((d) => {
+            if (d.myPlayer) d.myPlayer = applyXp(d.myPlayer, xp).player;
+          }),
       });
       this.session.start();
       if (this.save.get().settings.debug) void this.session.toggleDebug();

@@ -36,6 +36,8 @@ export interface SessionCallbacks {
   onFinish(result: MatchResult): void;
   onQuit(): void;
   onRestart(): void;
+  /** Debug-only: grant XP to the created player. */
+  onDebugGrantXp?(xp: number): void;
 }
 
 /** Hooks used by the (lazily loaded) debug overlay. */
@@ -46,6 +48,14 @@ export interface DebugHooks {
   controlledId(): number;
   setHumanAi(enabled: boolean): void;
   spawnBall(): void;
+  /** Plays the rest of the match instantly (AI controls everyone). */
+  simulateToEnd(): void;
+  restart(): void;
+  grantXp(xp: number): void;
+  /** Cycles control through the human team. */
+  switchPlayer(): void;
+  /** Adds `delta` to every attribute of the controlled player (clamped 25–99). */
+  boostAttributes(delta: number): void;
 }
 
 /**
@@ -90,6 +100,7 @@ export class GameSession {
 
     this.hud = new Hud(overlay, teams, sim.mode.hasOpponents, () => this.setPaused(true));
     this.touch = new TouchControls(overlay, settings.touch);
+    this.touch.setActionVisible('pass', sim.mode.teamSize > 1);
     this.input.add(this.touch);
     this.input.add(new KeyboardInput());
     this.input.add(new GamepadInput());
@@ -122,6 +133,29 @@ export class GameSession {
       setHumanAi: (enabled) => {
         this.humanAi = enabled;
         this.syncHumans();
+      },
+      restart: () => this.callbacks.onRestart(),
+      grantXp: (xp) => this.callbacks.onDebugGrantXp?.(xp),
+      switchPlayer: () => {
+        const team = this.match.sim.players.filter((p) => p.team === HUMAN_TEAM);
+        const index = team.findIndex((p) => p.id === this.controlledId);
+        const next = team[(index + 1) % team.length];
+        if (next) this.setControlled(next.id);
+      },
+      boostAttributes: (delta) => {
+        const p = this.match.sim.players[this.controlledId];
+        if (!p) return;
+        for (const key of Object.keys(p.attr) as Array<keyof typeof p.attr>) p.attr[key] = Math.max(25, Math.min(99, p.attr[key] + delta));
+      },
+      simulateToEnd: () => {
+        const { sim, ai, inputs } = this.match;
+        const everyone = new Set<number>();
+        let guard = 60 * 60 * 30;
+        while (!sim.isOver() && guard-- > 0) {
+          ai.update(sim, SIM_DT, inputs, everyone);
+          sim.step(inputs);
+        }
+        if (sim.isOver() && this.finishTimer <= 0) this.finishTimer = 0.5;
       },
       spawnBall: () => {
         const p = this.match.sim.players[this.controlledId];
@@ -367,11 +401,11 @@ export class GameSession {
     const defending = p.team !== sim.match.offense;
     const teammates = sim.mode.teamSize > 1;
     if (hasBall) {
-      this.touch.setLabels({ shoot: t('hud.shoot'), pass: teammates ? t('hud.pass') : '—', skill: t('hud.move'), sprint: t('hud.sprint') });
+      this.touch.setLabels({ shoot: t('hud.shoot'), pass: teammates ? t('hud.pass') : '', skill: t('hud.move'), sprint: t('hud.sprint') });
     } else if (defending) {
-      this.touch.setLabels({ shoot: t('hud.block'), pass: teammates ? t('hud.switch') : '—', skill: t('hud.steal'), sprint: t('hud.sprint') });
+      this.touch.setLabels({ shoot: t('hud.block'), pass: teammates ? t('hud.switch') : '', skill: t('hud.steal'), sprint: t('hud.sprint') });
     } else {
-      this.touch.setLabels({ shoot: t('hud.jump'), pass: teammates ? t('hud.callBall') : '—', skill: '—', sprint: t('hud.sprint') });
+      this.touch.setLabels({ shoot: t('hud.jump'), pass: teammates ? t('hud.callBall') : '', skill: '', sprint: t('hud.sprint') });
     }
   }
 

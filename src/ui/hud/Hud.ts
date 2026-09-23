@@ -92,6 +92,8 @@ export class Hud {
   }
 
   updateMatch(match: MatchState, practice: boolean): void {
+    // Exposed for styling and automation (e.g. tests wait for "live").
+    if (this.changed('phase', match.phase)) this.root.dataset.phase = match.phase;
     if (this.changed('home', match.score[0])) this.homeScore.textContent = String(match.score[0]);
     if (this.changed('away', match.score[1])) this.awayScore.textContent = String(match.score[1]);
     const clockText = practice ? t('hud.practice') : match.overtime ? t('hud.overtime') : formatClock(match.gameClock);

@@ -43,9 +43,13 @@ const JUMP_FRACTION: Record<string, number> = {
 };
 
 export function processInput(world: World, p: SimPlayer, input: PlayerInput): void {
+  if (world.match.phase !== 'live') {
+    // Input buffering: a button held through a stoppage registers as a press when play resumes.
+    p.prevButtons = 0;
+    return;
+  }
   const prev = p.prevButtons;
   p.prevButtons = input.buttons;
-  if (world.match.phase !== 'live') return;
 
   const { ball } = world;
   const holding = ball.phase === 'held' && ball.holder === p.id;

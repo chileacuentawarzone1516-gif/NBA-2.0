@@ -10,6 +10,15 @@ import type { InputFrame, InputSource } from './InputController';
  * Multi-touch uses pointer capture per pointerId, so sliding off a button still releases it.
  */
 type ActionId = 'shoot' | 'pass' | 'skill' | 'sprint';
+
+/** Pointer capture can throw if the pointer is already gone; input must keep working regardless. */
+function capturePointer(el: HTMLElement, pointerId: number): void {
+  try {
+    el.setPointerCapture(pointerId);
+  } catch {
+    // Without capture we still receive the release via the root's pointerup/cancel listeners.
+  }
+}
 const ACTION_BUTTONS: Record<ActionId, number> = {
   shoot: Button.Shoot,
   pass: Button.Pass,
@@ -65,11 +74,22 @@ export class TouchControls implements InputSource {
     this.root.style.setProperty('--btn-scale', String(settings.buttonScale));
   }
 
+  /** Contextual labels; an empty label marks the action unavailable in this context. */
   setLabels(labels: Record<ActionId, string>): void {
     for (const [id, text] of Object.entries(labels) as Array<[ActionId, string]>) {
       const label = this.labels.get(id);
-      if (label && label.textContent !== text) label.textContent = text;
+      if (!label || label.textContent === text) continue;
+      label.textContent = text;
+      const button = this.buttons.get(id);
+      button?.classList.toggle('unavailable', text === '');
+      button?.setAttribute('aria-disabled', String(text === ''));
     }
+  }
+
+  /** Hides an action entirely (e.g. PASS in modes without teammates). */
+  setActionVisible(id: ActionId, visible: boolean): void {
+    const button = this.buttons.get(id);
+    if (button) button.hidden = !visible;
   }
 
   setVisible(visible: boolean): void {
@@ -80,7 +100,7 @@ export class TouchControls implements InputSource {
     if (!this.enabled || this.stickPointer !== -1) return;
     e.preventDefault();
     this.stickPointer = e.pointerId;
-    this.stickZone.setPointerCapture(e.pointerId);
+    capturePointer(this.stickZone, e.pointerId);
     const rect = this.root.getBoundingClientRect();
     // Keep the base fully on screen.
     const r = this.settings.stickRadius;
@@ -95,7 +115,7 @@ export class TouchControls implements InputSource {
     if (!this.enabled) return;
     e.preventDefault();
     e.stopPropagation();
-    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+    capturePointer(e.currentTarget as HTMLElement, e.pointerId);
     this.pressed.set(e.pointerId, id);
     this.buttons.get(id)?.classList.add('pressed');
     if (this.settings.haptics && typeof navigator.vibrate === 'function') navigator.vibrate(id === 'shoot' ? 12 : 8);

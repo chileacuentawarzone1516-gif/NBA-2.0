@@ -1,7 +1,6 @@
 /** Spanish strings (reference dictionary: every other language must provide the same keys). */
 export const es = {
   'app.tagline': 'Baloncesto callejero en 3D',
-  'app.loading': 'Cargando…',
   'app.rotate': 'Gira el dispositivo para jugar en horizontal',
   'app.webglError': 'Tu navegador no soporta WebGL2. Actualízalo o prueba con otro navegador.',
 
@@ -22,7 +21,6 @@ export const es = {
   'setup.useMyPlayer': 'Jugar con mi jugador',
   'setup.start': 'Empezar',
 
-  'mode.practice': 'Práctica libre',
   'mode.oneOnOne': '1 contra 1',
   'mode.threeOnThree': '3 contra 3',
   'mode.oneOnOne.desc': 'A 15 puntos · 3 min · posesión 14 s',
@@ -105,7 +103,6 @@ export const es = {
   'myPlayer.archetype': 'Arquetipo',
   'myPlayer.points': 'Puntos de mejora: {points}',
   'myPlayer.upgrade': 'Mejorar',
-  'myPlayer.cost': 'Coste {cost}',
   'myPlayer.maxed': 'Máximo',
   'myPlayer.skills': 'Habilidades ({equipped}/{max})',
   'myPlayer.locked': 'Nivel {level}',
@@ -140,7 +137,6 @@ export const es = {
   'settings.cameraDistance': 'Distancia de cámara',
   'settings.language': 'Idioma',
   'settings.debug': 'Mostrar panel de depuración',
-  'settings.saved': 'Ajustes guardados',
 
   'hud.pause': 'Pausa',
   'hud.clear': 'SACA FUERA DEL ARCO',
@@ -173,8 +169,6 @@ export const es = {
   'feed.shotClock': 'Fin de posesión',
   'feed.outOfBounds': 'Fuera',
   'feed.clearViolation': 'No sacó fuera del arco',
-  'feed.turnover': 'Pérdida',
-  'feed.rebound': 'Rebote',
   'feed.checkBall': 'Balón a {team}',
   'feed.buzzer': '¡Sobre la bocina!',
 
@@ -211,6 +205,9 @@ export const es = {
   'debug.toggleAi': 'IA on/off',
   'debug.slowmo': 'Cámara lenta',
   'debug.hitboxes': 'Hitboxes',
+  'debug.simulateEnd': 'Simular hasta el final',
+  'debug.switchPlayer': 'Cambiar jugador',
+  'debug.boost': '+10 atributos',
 } as const;
 
 export type I18nKey = keyof typeof es;

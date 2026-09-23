@@ -30,8 +30,11 @@ function createForm(ctx: UiContext, rerender: () => void): HTMLElement {
   renderCards();
   const create = button(t('myPlayer.create'), () => {
     const name = sanitizeName(nameInput.value) || 'Rookie';
+    // Resolve the scroll container before the form is replaced (detached nodes have no ancestors).
+    const scroller = cards.closest('#ui');
     ctx.save.update((d) => void (d.myPlayer = createMyPlayer(name, archetype)));
     rerender();
+    scroller?.scrollTo({ top: 0 });
   }, 'primary', 'btn-large');
   return h(
     'div',

@@ -33,7 +33,11 @@ export class DebugOverlay {
       h(
         'div',
         { class: 'debug-actions' },
+        button(t('debug.resetMatch'), () => this.hooks.restart()),
         button(t('debug.spawnBall'), () => this.hooks.spawnBall()),
+        button(t('debug.switchPlayer'), () => this.hooks.switchPlayer()),
+        button(t('debug.boost'), () => this.hooks.boostAttributes(10)),
+        button(t('debug.grantXp'), () => this.hooks.grantXp(500)),
         button(t('debug.toggleAi'), () => {
           this.aiForHuman = !this.aiForHuman;
           this.hooks.setHumanAi(this.aiForHuman);
@@ -43,6 +47,7 @@ export class DebugOverlay {
           this.hooks.loop.timeScale = this.slowmo ? 0.25 : 1;
         }),
         button(t('debug.hitboxes'), () => this.toggleHitboxes()),
+        button(t('debug.simulateEnd'), () => this.hooks.simulateToEnd()),
       ),
     );
     parent.append(this.root);
