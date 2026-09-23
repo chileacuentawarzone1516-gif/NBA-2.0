@@ -37,8 +37,11 @@ function boot(): void {
 
 boot();
 
-// Offline support in production builds only (dev server stays cache-free).
-if (import.meta.env.PROD && 'serviceWorker' in navigator) {
+/** True inside the Capacitor native shell (assets are already bundled locally there). */
+const isNativeShell = Boolean((window as unknown as { Capacitor?: { isNativePlatform?: () => boolean } }).Capacitor?.isNativePlatform?.());
+
+// Offline support for the web build only (dev server stays cache-free; native apps ship assets).
+if (import.meta.env.PROD && !isNativeShell && 'serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`).catch((error: unknown) => log.warn('service worker registration failed', error));
   });

@@ -20,6 +20,8 @@ Juego de baloncesto 3D original para móvil y navegador: partidos **1 contra 1**
 | `npm test` | Tests unitarios y de integración (Vitest, headless) |
 | `npm run test:e2e` | Tests end-to-end (Playwright) contra el build de producción |
 | `npm run balance` | Informe de balance: 24 partidos IA vs IA por modo (FG%, 3P%, robos, tapones…) |
+| `npm run android:sync` | Build web + copia al proyecto nativo Android (Capacitor) |
+| `npm run android:build` | Genera el APK de depuración (`android/app/build/outputs/apk/debug/app-debug.apk`) |
 
 Variables del informe de balance: `BALANCE_MATCHES`, `BALANCE_MODES=oneOnOne,threeOnThree`, `BALANCE_DIFFS=pro,legend`.
 
@@ -42,6 +44,14 @@ Movimientos de dribbling según la dirección del stick respecto al jugador: neu
 
 - [Arquitectura](docs/ARCHITECTURE.md): decisiones técnicas, capas, simulación, IA, render, seguridad y preparación para red.
 - [Estado](docs/STATUS.md): estado de cada sistema (IMPLEMENTED / PARTIAL / PLACEHOLDER / NOT IMPLEMENTED / BLOCKED) y métricas verificadas.
+
+## Android
+
+Requisitos: JDK 21 y Android SDK (plataforma 36, build-tools 36) con `ANDROID_HOME` definido o `android/local.properties` (`sdk.dir=...`). La app se abre en horizontal y en modo inmersivo (sin barras del sistema), con la pantalla siempre encendida durante el juego.
+
+- `appId` provisional: `com.hoopline.game` (`capacitor.config.ts`). Confírmalo antes de la primera subida a Google Play: después ya no se puede cambiar.
+- Para publicar hace falta un keystore de firma propio (no incluido) y `./gradlew bundleRelease`.
+- CI (`.github/workflows/ci.yml`) ejecuta tests, build, E2E y genera el APK como artefacto.
 
 ## Despliegue
 

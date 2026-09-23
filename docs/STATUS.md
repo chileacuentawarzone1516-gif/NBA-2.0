@@ -68,9 +68,15 @@ Leyenda: **IMPLEMENTED** (integrado, ejecutado y verificado) · **PARTIAL** · *
 | Guardado versionado con migraciones y backup | IMPLEMENTED | Tests |
 | PWA (manifest, service worker, iconos) | IMPLEMENTED | SW solo en producción |
 | Despliegue Netlify con CSP y caché | IMPLEMENTED | `netlify.toml` |
-| Build Android/iOS (Capacitor) | NOT IMPLEMENTED | Ver recomendaciones del README |
+| Build Android (Capacitor) | IMPLEMENTED | APK de depuración compilado y verificado (targetSdk 36, horizontal, inmersivo, iconos/splash propios, 5 MB). Firma de release: pendiente de keystore del propietario |
+| Build iOS | BLOCKED | Requiere macOS + Xcode (no disponible en este entorno); Capacitor ya está configurado |
+| CI (GitHub Actions) | IMPLEMENTED | Tests, build, E2E y APK como artefacto |
 | Multijugador online | NOT IMPLEMENTED | Arquitectura preparada (ver ARCHITECTURE.md) |
 | Dominio canónico / sitemap | BLOCKED | Requiere el dominio de producción definitivo |
+
+## Dependencias con avisos conocidos
+
+- `npm audit`: 3 avisos moderados en `uuid` vía `xcode`, dependencia **solo de desarrollo** de `@capacitor/cli` (manipulación de proyectos iOS). No forma parte del bundle del juego. Revisar al actualizar Capacitor.
 
 ## Métricas verificadas
 
