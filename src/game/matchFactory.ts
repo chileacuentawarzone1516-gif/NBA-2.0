@@ -16,6 +16,8 @@ export interface MatchConfig {
   mode: ModeId;
   seed: number;
   difficulty: DifficultyId;
+  /** Opponent AI difficulty when it differs from the home side (defaults to `difficulty`). */
+  awayDifficulty?: DifficultyId;
   homeTeamId: string;
   awayTeamId: string;
   /** Optional explicit lineups (player ids); defaults to the first N roster players. */
@@ -39,12 +41,13 @@ function lineup(teamId: string, size: number, explicit?: readonly string[]): Ros
 
 export function createMatch(config: MatchConfig): Match {
   const mode = MODES[config.mode];
-  const home = lineup(config.homeTeamId, mode.teamSize, config.homeLineup);
-  if (config.homeStar) home[0] = { def: config.homeStar.def, skills: config.homeStar.skills };
-  const away = mode.hasOpponents ? lineup(config.awayTeamId, mode.teamSize, config.awayLineup) : [];
-  const sim = new Simulation({ mode, seed: config.seed, teams: [home, away] });
-  const difficulty = DIFFICULTIES[config.difficulty];
-  const ai = new AIDirector(sim, [difficulty, difficulty], config.seed);
+  const homeRoster = lineup(config.homeTeamId, mode.teamSize, config.homeLineup);
+  if (config.homeStar) homeRoster[0] = { def: config.homeStar.def, skills: config.homeStar.skills };
+  const awayRoster = mode.hasOpponents ? lineup(config.awayTeamId, mode.teamSize, config.awayLineup) : [];
+  const sim = new Simulation({ mode, seed: config.seed, teams: [homeRoster, awayRoster] });
+  const home = DIFFICULTIES[config.difficulty];
+  const away = DIFFICULTIES[config.awayDifficulty ?? config.difficulty];
+  const ai = new AIDirector(sim, [home, away], config.seed);
   const inputs = sim.players.map(() => emptyInput());
   return { config, sim, ai, inputs };
 }

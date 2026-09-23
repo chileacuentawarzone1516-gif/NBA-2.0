@@ -77,6 +77,26 @@ describe('headless AI vs AI matches', () => {
     expect(a.sim.players.map((p) => [p.pos.x, p.pos.z])).toEqual(b.sim.players.map((p) => [p.pos.x, p.pos.z]));
   });
 
+  it('higher difficulty wins through better decisions/execution (same rosters)', () => {
+    let legendWins = 0;
+    const games = 8;
+    for (let i = 0; i < games; i++) {
+      // Mirror matchups: the same two teams, legend alternating sides.
+      const legendHome = i % 2 === 0;
+      const { sim } = runMatch({
+        mode: 'threeOnThree',
+        seed: 500 + i,
+        difficulty: legendHome ? 'legend' : 'rookie',
+        awayDifficulty: legendHome ? 'rookie' : 'legend',
+        homeTeamId: legendHome ? 'comets' : 'tides',
+        awayTeamId: legendHome ? 'tides' : 'comets',
+      });
+      if (sim.match.winner === (legendHome ? 0 : 1)) legendWins++;
+    }
+    console.info(`legend won ${legendWins}/${games} vs rookie`);
+    expect(legendWins).toBeGreaterThanOrEqual(6);
+  });
+
   it('simulates fast enough for mobile (well under the 16.6 ms frame budget)', () => {
     const match = createMatch({ mode: 'threeOnThree', seed: 3, difficulty: 'legend', homeTeamId: 'comets', awayTeamId: 'foxes' });
     const { sim, ai, inputs } = match;

@@ -31,7 +31,7 @@ Leyenda: **IMPLEMENTED** (integrado, ejecutado y verificado) · **PARTIAL** · *
 | --- | --- | --- |
 | Asignaciones, ayudas, espaciado, cortes | IMPLEMENTED | |
 | Selección de tiro con anticipación de closeout | IMPLEMENTED | FG ~40–46 %, 3P ~36–38 % (herramienta `npm run balance`) |
-| Dificultad por decisiones/ejecución | IMPLEMENTED | 4 perfiles |
+| Dificultad por decisiones/ejecución | IMPLEMENTED | 4 perfiles. Test cara a cara con plantillas idénticas: Leyenda gana 7/8 a Novato |
 | Compañeros IA con humano | IMPLEMENTED | 3v3 |
 
 ## Modos y progresión
@@ -80,7 +80,7 @@ Leyenda: **IMPLEMENTED** (integrado, ejecutado y verificado) · **PARTIAL** · *
 
 ## Métricas verificadas
 
-- Tests: 29 unitarios/integración + 7 E2E (Playwright, build de producción, viewport Android horizontal, sin errores ni warnings de consola).
+- Tests: 30 unitarios/integración + 7 E2E (Playwright, build de producción, viewport Android horizontal, sin errores ni warnings de consola).
 - Coste de simulación + IA: ~0,01 ms por tick (3v3).
 - Draw calls 3v3: 85 (desde 246 antes del skinning rígido).
 - Bundle: ~60 KB gzip de juego + ~137 KB gzip de Three.js.
