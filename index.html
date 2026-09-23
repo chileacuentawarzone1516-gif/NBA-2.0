@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+    <meta name="theme-color" content="#0b0f17" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Hoopline" />
+    <title>Hoopline — Baloncesto callejero 3D</title>
+    <meta name="description" content="Hoopline: juego de baloncesto 3D para móvil con partidos 1 contra 1 y 3 contra 3, tiro con medidor de timing, dribbling, defensa, progresión de tu jugador y controles táctiles." />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Hoopline — Baloncesto callejero 3D" />
+    <meta property="og:description" content="Partidos 1v1 y 3v3, tiro con timing, dribbling y progresión. Juega en tu móvil o navegador." />
+    <meta property="og:image" content="/icons/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" href="/icons/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "VideoGame",
+        "name": "Hoopline",
+        "description": "Juego de baloncesto 3D para móvil con modos 1v1 y 3v3.",
+        "genre": ["Sports", "Basketball"],
+        "gamePlatform": ["Web browser", "Android", "iOS"],
+        "applicationCategory": "Game",
+        "operatingSystem": "Any",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" }
+      }
+    </script>
+  </head>
+  <body>
+    <div id="app">
+      <canvas id="scene" aria-hidden="true"></canvas>
+      <div id="overlay"></div>
+      <main id="ui" hidden></main>
+      <div class="rotate-hint" role="alert">
+        <div class="rotate-icon" aria-hidden="true"></div>
+        <p>Gira el dispositivo · Rotate your device</p>
+      </div>
+      <div id="boot-splash" class="boot-splash" aria-live="polite">
+        <div class="brand-mark" aria-hidden="true"></div>
+        <p>HOOPLINE</p>
+      </div>
+    </div>
+    <noscript>Hoopline necesita JavaScript para funcionar. Hoopline requires JavaScript.</noscript>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

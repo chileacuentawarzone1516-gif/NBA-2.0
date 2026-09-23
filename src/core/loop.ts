@@ -22,6 +22,8 @@ export class FixedStepLoop {
   readonly stats: LoopStats = { fps: 0, frameMs: 0, stepsLastFrame: 0, simMs: 0, renderMs: 0 };
   /** Scales simulated time (debug slow-motion). Does not change the step size. */
   timeScale = 1;
+  /** Minimum milliseconds between rendered frames (e.g. 33.3 caps rendering at 30 FPS). */
+  renderIntervalMs = 0;
 
   private accumulator = 0;
   private lastTime = -1;
@@ -65,6 +67,8 @@ export class FixedStepLoop {
     this.rafId = requestAnimationFrame(this.frame);
 
     if (this.lastTime < 0) this.lastTime = now;
+    // Frame cap: skip this display refresh; elapsed time keeps accumulating.
+    if (this.renderIntervalMs > 0 && now - this.lastTime < this.renderIntervalMs - 2) return;
     // Clamp long frames (tab switches, GC pauses) to avoid a spiral of death.
     const frameDt = Math.min((now - this.lastTime) / 1000, 0.25);
     this.lastTime = now;
