@@ -43,17 +43,6 @@ export function estimateShot(world: World, p: SimPlayer, anticipation = 0, assum
   return { pct, points, ev: pct * points, beyondArc };
 }
 
-/** Distance from `p` to the nearest opponent. */
-export function nearestOpponentDistance(world: World, p: SimPlayer): number {
-  let best = Infinity;
-  for (const o of world.players) {
-    if (o.team === p.team) continue;
-    const d = Math.hypot(o.pos.x - p.pos.x, o.pos.z - p.pos.z);
-    if (d < best) best = d;
-  }
-  return best;
-}
-
 /** Nearest opponent positioned between `p` and the rim (the one actually guarding him). */
 export function frontDefender(world: World, p: SimPlayer, maxDist = 3): { player: SimPlayer | null; dist: number } {
   const toHoop = dirTo(p, world.hoop.x, world.hoop.z);

@@ -17,10 +17,6 @@ export function setLanguage(language: Language): void {
   if (typeof document !== 'undefined') document.documentElement.lang = language;
 }
 
-export function getLanguage(): Language {
-  return current;
-}
-
 /** Translates a key, interpolating `{name}` placeholders. */
 export function t(key: I18nKey, params?: Record<string, string | number>): string {
   const template = DICTIONARIES[current][key] ?? es[key] ?? key;

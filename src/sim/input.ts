@@ -30,14 +30,6 @@ export function emptyInput(): PlayerInput {
   return { moveX: 0, moveZ: 0, buttons: 0, passTarget: -1 };
 }
 
-export function copyInput(out: PlayerInput, from: PlayerInput): PlayerInput {
-  out.moveX = from.moveX;
-  out.moveZ = from.moveZ;
-  out.buttons = from.buttons;
-  out.passTarget = from.passTarget;
-  return out;
-}
-
 export function isDown(input: PlayerInput, button: number): boolean {
   return (input.buttons & button) !== 0;
 }

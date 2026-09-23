@@ -15,21 +15,10 @@ export interface Vec2 {
   z: number;
 }
 
-export const TAU = Math.PI * 2;
+const TAU = Math.PI * 2;
 
 export function vec3(x = 0, y = 0, z = 0): Vec3 {
   return { x, y, z };
-}
-
-export function vec2(x = 0, z = 0): Vec2 {
-  return { x, z };
-}
-
-export function set3(out: Vec3, x: number, y: number, z: number): Vec3 {
-  out.x = x;
-  out.y = y;
-  out.z = z;
-  return out;
 }
 
 export function copy3(out: Vec3, a: Vec3): Vec3 {
@@ -37,39 +26,6 @@ export function copy3(out: Vec3, a: Vec3): Vec3 {
   out.y = a.y;
   out.z = a.z;
   return out;
-}
-
-export function copy2(out: Vec2, a: Vec2): Vec2 {
-  out.x = a.x;
-  out.z = a.z;
-  return out;
-}
-
-export function length3(a: Vec3): number {
-  return Math.sqrt(a.x * a.x + a.y * a.y + a.z * a.z);
-}
-
-export function lengthXZ(x: number, z: number): number {
-  return Math.sqrt(x * x + z * z);
-}
-
-export function distXZ(a: Vec2, b: Vec2): number {
-  const dx = a.x - b.x;
-  const dz = a.z - b.z;
-  return Math.sqrt(dx * dx + dz * dz);
-}
-
-export function distSqXZ(a: Vec2, b: Vec2): number {
-  const dx = a.x - b.x;
-  const dz = a.z - b.z;
-  return dx * dx + dz * dz;
-}
-
-export function dist3(a: Vec3, b: Vec3): number {
-  const dx = a.x - b.x;
-  const dy = a.y - b.y;
-  const dz = a.z - b.z;
-  return Math.sqrt(dx * dx + dy * dy + dz * dz);
 }
 
 export function clamp(v: number, min: number, max: number): number {
@@ -88,12 +44,6 @@ export function lerp(a: number, b: number, t: number): number {
 export function invLerp(a: number, b: number, v: number): number {
   if (a === b) return 0;
   return clamp01((v - a) / (b - a));
-}
-
-/** Move `current` toward `target` by at most `maxDelta`. */
-export function approach(current: number, target: number, maxDelta: number): number {
-  if (current < target) return Math.min(current + maxDelta, target);
-  return Math.max(current - maxDelta, target);
 }
 
 /** Wraps an angle to (-PI, PI]. */
@@ -124,22 +74,9 @@ export function headingOf(x: number, z: number): number {
   return Math.atan2(x, z);
 }
 
-export function headingX(angle: number): number {
-  return Math.sin(angle);
-}
-
-export function headingZ(angle: number): number {
-  return Math.cos(angle);
-}
-
 /** Exponential smoothing factor that is frame-rate independent. */
 export function damp(current: number, target: number, lambda: number, dt: number): number {
   return lerp(current, target, 1 - Math.exp(-lambda * dt));
-}
-
-export function smoothstep(edge0: number, edge1: number, x: number): number {
-  const t = clamp01((x - edge0) / (edge1 - edge0));
-  return t * t * (3 - 2 * t);
 }
 
 export function isFiniteVec3(v: Vec3): boolean {

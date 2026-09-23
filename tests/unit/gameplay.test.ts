@@ -6,7 +6,7 @@ import { MODES } from '../../src/data/modes';
 import { NEUTRAL_MODIFIERS } from '../../src/data/modifiers';
 import { getPlayer } from '../../src/data/players';
 import { SIM_DT, STAMINA } from '../../src/data/tuning';
-import { Button, emptyInput, type PlayerInput } from '../../src/sim/input';
+import { Button, emptyInput, quantizeInput, type PlayerInput } from '../../src/sim/input';
 import { Simulation } from '../../src/sim/Simulation';
 import { classifyMoveTrigger } from '../../src/sim/systems/dribbling';
 import { computeShotChance, gradeTiming, type ShotContext } from '../../src/sim/systems/shooting';
@@ -148,6 +148,16 @@ describe('stamina', () => {
     expect(p.exhausted).toBe(true); // still below recover threshold
     for (let i = 0; i < 60 * 5; i++) updateStamina(p, SIM_DT);
     expect(p.exhausted).toBe(false);
+  });
+});
+
+describe('network input packing', () => {
+  it('quantizes inputs to 8-bit precision and clamps the stick', () => {
+    const q = quantizeInput({ moveX: 0.333333, moveZ: -2, buttons: Button.Shoot | Button.Sprint | 0x300, passTarget: 2 });
+    expect(Math.abs(q.moveX - 0.333333)).toBeLessThan(1 / 127);
+    expect(q.moveZ).toBe(-1);
+    expect(q.buttons).toBe(Button.Shoot | Button.Sprint);
+    expect(q.passTarget).toBe(2);
   });
 });
 

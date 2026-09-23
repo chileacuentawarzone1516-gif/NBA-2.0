@@ -110,8 +110,3 @@ export function makeDead(world: World): void {
   ball.phaseTime = 0;
 }
 
-export function holderOf(world: World): SimPlayer | null {
-  const { ball } = world;
-  if (ball.phase !== 'held' || ball.holder < 0) return null;
-  return world.players[ball.holder] ?? null;
-}

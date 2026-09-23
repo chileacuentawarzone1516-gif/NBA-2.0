@@ -225,10 +225,6 @@ export function shotPoints(world: World, x: number, z: number): number {
   return distanceBeyondArc(world.hoop, x, z) > 0 ? world.mode.pointsBeyondArc : world.mode.pointsInside;
 }
 
-export function isBeyondArc(world: World, x: number, z: number): boolean {
-  return distanceBeyondArc(world.hoop, x, z) > 0;
-}
-
 // --- Trajectory planning -------------------------------------------------------------
 
 export type SimulatedOutcome = 'make' | 'miss';

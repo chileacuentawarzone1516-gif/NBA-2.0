@@ -24,15 +24,3 @@ export function emit(world: World, event: SimEvent): void {
   world.events.push(event);
 }
 
-export function teammates(world: World, player: SimPlayer): SimPlayer[] {
-  return world.players.filter((p) => p.team === player.team && p.id !== player.id);
-}
-
-export function opponents(world: World, player: SimPlayer): SimPlayer[] {
-  return world.players.filter((p) => p.team !== player.team);
-}
-
-export function ballHolder(world: World): SimPlayer | null {
-  const { ball } = world;
-  return ball.phase === 'held' && ball.holder >= 0 ? (world.players[ball.holder] ?? null) : null;
-}

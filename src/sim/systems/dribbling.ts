@@ -147,10 +147,3 @@ export function dribbleRate(p: SimPlayer): number {
   return lerp(DRIBBLE.bounceRateIdle, DRIBBLE.bounceRateSprint, clamp(speed / 6, 0, 1));
 }
 
-/** Archetype-level dribble capability summary (used by UI/AI). */
-export function preferredMoves(p: SimPlayer): DribbleMoveId[] {
-  return DRIBBLE_MOVE_IDS.filter((id) => p.attr.ballHandle >= DRIBBLE_MOVES[id].minHandle).sort(
-    (a, b) => (DRIBBLE_MOVES[b].archetypeAffinity[p.archetype] ?? 1) - (DRIBBLE_MOVES[a].archetypeAffinity[p.archetype] ?? 1),
-  );
-}
-

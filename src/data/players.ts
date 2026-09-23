@@ -117,6 +117,3 @@ export function playerOverall(player: PlayerDef): number {
   return computeOverall(player.attributes, player.position);
 }
 
-export function playerDisplayName(player: Pick<PlayerDef, 'firstName' | 'lastName'>): string {
-  return `${player.firstName.charAt(0)}. ${player.lastName}`;
-}

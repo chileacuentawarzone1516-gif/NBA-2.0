@@ -247,4 +247,3 @@ export type SimEvent =
   | { type: 'dead'; reason: DeadReason }
   | { type: 'gameEnd'; winner: TeamIndex; score: [number, number] };
 
-export type SimEventType = SimEvent['type'];
